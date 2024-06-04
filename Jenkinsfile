@@ -9,7 +9,7 @@ pipeline {
 
         stage('Build') {
             steps {
-                sh 'docker build -t nodejs-random-color:ver-${BUILD_ID} .'
+                sh 'docker build -t terraform-jenkins-ecr:ver-${BUILD_ID} .'
             }
         }
         stage('Upload image to ECR') {
