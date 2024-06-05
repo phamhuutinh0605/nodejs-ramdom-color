@@ -1,1 +1,1 @@
-test auto build ecr with jenkins - 5.1.6
+test auto build ecr with jenkins - 5.1.66
