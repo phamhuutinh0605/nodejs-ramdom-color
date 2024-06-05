@@ -1,1 +1,1 @@
-test auto build ecr with jenkins - 3
+test auto build ecr with jenkins - 4
