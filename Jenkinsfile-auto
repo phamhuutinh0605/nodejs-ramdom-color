@@ -1,7 +1,7 @@
 pipeline {
     agent any
     environment{
-        FULL_IMAGE = "730335574156.dkr.ecr.ap-southeast-1.amazonaws.com/jenkins-ecr:latest"
+        FULL_IMAGE = "730335574156.dkr.ecr.ap-southeast-1.amazonaws.com/jenkins-ecr:ver-${BUILD_ID}"
         ECR_URI = "730335574156.dkr.ecr.ap-southeast-1.amazonaws.com/jenkins-ecr"
         TASK_DEFINITION =""
         NEW_TASK_DEFINITION=""
