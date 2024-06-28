@@ -1,0 +1,32 @@
+version: 0.2
+env:
+  secrets-manager:
+    DOCKER_HUB_USERNAME: docker_username_secret
+    DOCKER_HUB_PASSWORD: docker_password_secret
+phases:
+  install:
+    runtime-versions:
+      nodejs: 14
+    commands:
+      - npm install
+  pre_build:
+    commands:
+      - docker login -u $DOCKER_HUB_USERNAME -p $DOCKER_HUB_PASSWORD
+      - aws ecr get-login-password --region ap-southeast-1 | docker login --username AWS --password-stdin 730335574156.dkr.ecr.ap-southeast-1.amazonaws.com
+      - REPOSITORY_URI=730335574156.dkr.ecr.ap-southeast-1.amazonaws.com/nodejs-random-color-ecr
+      - COMMIT_HASH=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)
+      - BUILD_ID=$(echo $CODEBUILD_BUILD_ID | cut -d':' -f2)
+      - TAG=$COMMIT_HASH_$BUILD_ID
+  build:
+    commands:
+      - docker build -t nodejs-random-color-ecr:$TAG .
+  post_build:
+    commands:
+      - docker tag nodejs-random-color-ecr:$TAG $REPOSITORY_URI:$TAG
+      - docker push $REPOSITORY_URI:$TAG
+      - printf '[{"name":"nodejs-container","imageUri":"%s"}]'
+        $REPOSITORY_URI:$TAG > imagedefinitions.json
+      - cat imagedefinitions.json
+artifact:
+  files: imagedefinitions.json
+  discard-paths: yes
